@@ -1,35 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import NavBar from "./shared/NavBar/NavBar";
+import Home from './pages/Home/Home';
+import HangMan from './pages/HangMan/HangMan';
+import TicTacToe from './pages/TicTacToe/TicTacToe';
+import SimonSays from './pages/SimonSays/SimonSays';
+import WhackAMole from './pages/WhackAMole/WhackAMole';
+import MergeBlock2048 from './pages/MergeBlock2048/MergeBlock2048';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function Layout() {
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <NavBar />
+      <Outlet />
     </>
-  )
+  );
 }
 
-export default App
+function App() {
+  return (
+    <BrowserRouter basename="/classic-mini-games">
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/hang-man" element={<HangMan />} />
+          <Route path="/tic-tac-toe" element={<TicTacToe />} />
+          <Route path="/simon-says" element={<SimonSays />} />
+          <Route path="/whack-a-mole" element={<WhackAMole />} />
+          <Route path="/2048" element={<MergeBlock2048 />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
