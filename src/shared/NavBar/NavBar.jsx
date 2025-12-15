@@ -23,6 +23,11 @@ export default function Navbar() {
 
         <ul className="drawer-links">
           <li>
+            <Link to="/" onClick={() => setOpen(false)}>
+              Home
+            </Link>
+          </li>
+          <li>
             <Link to="/hang-man" onClick={() => setOpen(false)}>
               Hang Man
             </Link>
