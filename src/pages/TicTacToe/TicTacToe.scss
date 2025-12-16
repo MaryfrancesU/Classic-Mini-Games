@@ -1,0 +1,96 @@
+.container {
+  padding: 10px;
+  text-align: center;
+
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+
+    h2 {
+      margin: 10px 0px;
+    }
+  }
+
+  .difficulty {
+    margin: 16px 0 24px;
+    font-size: 1rem;
+
+    select {
+      margin-left: 8px;
+      padding: 4px 8px;
+      font-size: 1rem;
+    }
+  }
+
+  .turn-indicator {
+    margin-bottom: 24px;
+  }
+
+  .board-wrapper {
+    position: relative;
+    display: inline-flex;
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+
+      width: clamp(280px, 60vmin, 520px);
+      height: clamp(280px, 60vmin, 520px);
+    }
+
+    .cell {
+      display: flex;
+      cursor: pointer;
+      user-select: none;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #333;
+    }
+
+    .mark {
+      font-size: clamp(3rem, 8vmin, 6rem);
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .player-mark {
+      color: red;
+    }
+
+    .computer-mark {
+      color: blue;
+    }
+  }
+
+  .overlay {
+    inset: 0;
+    display: flex;
+    color: white;
+    position: absolute;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.65);
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .overlay-buttons {
+      display: flex;
+      gap: 16px;
+
+      .button {
+        border: none;
+        color: black;
+        font-size: 1rem;
+        cursor: pointer;
+        padding: 12px 24px;
+        text-decoration: none;
+        background-color: white;
+      }
+    }
+  }
+}
