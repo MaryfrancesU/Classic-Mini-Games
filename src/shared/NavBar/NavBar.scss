@@ -8,7 +8,6 @@
 
 .navbar {
   top: 0;
-  width: 100%;
   height: 56px;
   z-index: 1000;
   display: flex;
@@ -25,10 +24,10 @@
 }
 
 .overlay {
-  position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.3);
   z-index: 1500;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .drawer {
