@@ -18,7 +18,7 @@ function Layout() {
 
 function App() {
   return (
-    <BrowserRouter basename="/Classic-Mini-Games">
+    <BrowserRouter basename="/Classic-Mini-Games/">
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
