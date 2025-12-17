@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import "./Hangman.scss";
+import "./HangMan.scss";
 
 import hangman0 from "../../images/hangman/hangman_0.png";
 import hangman1 from "../../images/hangman/hangman_1.png";
