@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./MergeBlock2048.scss";
 
 const GRID_SIZE = 4;
+const SWIPE_THRESHOLD = 40;
 
 const getEmptyGrid = () => Array(GRID_SIZE * GRID_SIZE).fill(0);
-
 const getRandomTile = () => (Math.random() < 0.9 ? 2 : 4);
 
 const addRandomTile = (grid) => {
@@ -13,7 +13,7 @@ const addRandomTile = (grid) => {
     .map((v, i) => (v === 0 ? i : null))
     .filter((v) => v !== null);
 
-  if (emptyIndexes.length === 0) return grid;
+  if (!emptyIndexes.length) return grid;
 
   const index = emptyIndexes[Math.floor(Math.random() * emptyIndexes.length)];
   const newGrid = [...grid];
@@ -61,29 +61,21 @@ const setCols = (cols) => {
 };
 
 const move = (grid, direction) => {
-  let newGrid = grid;
+  if (direction === "left") return setRows(getRows(grid).map(slideRow));
 
-  if (direction === "left") {
-    newGrid = setRows(getRows(grid).map(slideRow));
-  }
-
-  if (direction === "right") {
-    newGrid = setRows(
+  if (direction === "right")
+    return setRows(
       getRows(grid).map((row) => slideRow([...row].reverse()).reverse())
     );
-  }
 
-  if (direction === "up") {
-    newGrid = setCols(getCols(grid).map(slideRow));
-  }
+  if (direction === "up") return setCols(getCols(grid).map(slideRow));
 
-  if (direction === "down") {
-    newGrid = setCols(
+  if (direction === "down")
+    return setCols(
       getCols(grid).map((col) => slideRow([...col].reverse()).reverse())
     );
-  }
 
-  return newGrid;
+  return grid;
 };
 
 const hasMoves = (grid) => {
@@ -100,9 +92,12 @@ const hasMoves = (grid) => {
   return false;
 };
 
+const isMobile = () => "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
 const MergeBlocks2048 = () => {
   const [grid, setGrid] = useState(getEmptyGrid());
   const [gameOver, setGameOver] = useState(false);
+  const touchStart = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     let start = addRandomTile(getEmptyGrid());
@@ -110,10 +105,19 @@ const MergeBlocks2048 = () => {
     setGrid(start);
   }, []);
 
+  const applyMove = (direction) => {
+    if (gameOver) return;
+
+    const newGrid = move(grid, direction);
+    if (JSON.stringify(newGrid) !== JSON.stringify(grid)) {
+      const updated = addRandomTile(newGrid);
+      setGrid(updated);
+      if (!hasMoves(updated)) setGameOver(true);
+    }
+  };
+
   useEffect(() => {
     const handleKey = (e) => {
-      if (gameOver) return;
-
       const directions = {
         ArrowLeft: "left",
         ArrowRight: "right",
@@ -121,21 +125,35 @@ const MergeBlocks2048 = () => {
         ArrowDown: "down",
       };
 
-      if (!(e.key in directions)) return;
-
-      const newGrid = move(grid, directions[e.key]);
-
-      if (JSON.stringify(newGrid) !== JSON.stringify(grid)) {
-        const updated = addRandomTile(newGrid);
-        setGrid(updated);
-
-        if (!hasMoves(updated)) setGameOver(true);
+      if (directions[e.key]) {
+        e.preventDefault();
+        applyMove(directions[e.key]);
       }
     };
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [grid, gameOver]);
+
+  const handleTouchStart = (e) => {
+    const touch = e.touches[0];
+    touchStart.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchEnd = (e) => {
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - touchStart.current.x;
+    const dy = touch.clientY - touchStart.current.y;
+
+    if (Math.abs(dx) < SWIPE_THRESHOLD && Math.abs(dy) < SWIPE_THRESHOLD)
+      return;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+      applyMove(dx > 0 ? "right" : "left");
+    } else {
+      applyMove(dy > 0 ? "down" : "up");
+    }
+  };
 
   const resetGame = () => {
     let start = addRandomTile(getEmptyGrid());
@@ -146,9 +164,17 @@ const MergeBlocks2048 = () => {
 
   return (
     <div className="game-container">
-      <h2>Use your arrow keys to play!</h2>
+      <h2>
+        {isMobile()
+          ? "Swipe in any direction to play"
+          : "Use your arrow keys to play"}
+      </h2>
 
-      <div className="grid">
+      <div
+        className="grid"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         {grid.map((value, index) => (
           <div key={index} className={`tile tile-${value}`}>
             {value !== 0 && value}
