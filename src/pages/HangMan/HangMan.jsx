@@ -1,5 +1,5 @@
+import GameEndOverlay from "../../shared/Overlay/GameEndOverlay";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import "./HangMan.scss";
 
 import hangman0 from "../../images/hangman/hangman_0.png";
@@ -8,7 +8,7 @@ import hangman2 from "../../images/hangman/hangman_2.png";
 import hangman3 from "../../images/hangman/hangman_3.png";
 import hangman4 from "../../images/hangman/hangman_4.png";
 import hangman5 from "../../images/hangman/hangman_5.png";
-import hangman6 from "../../images/hangman/hangman_7.png"; //decided to skip 6
+import hangman6 from "../../images/hangman/hangman_7.png"; //skipped 6 on purpose, don't change
 
 const images = [
   hangman0,
@@ -148,17 +148,10 @@ const Hangman = () => {
       )}
 
       {gameOver && !loading && (
-        <div className="overlay">
-          <h1>{win ? "You Win!" : "Game Over"}</h1>
-          <div className="overlay-buttons">
-            <button className="button" onClick={resetGame}>
-              Play Again
-            </button>
-            <Link to="/" className="button">
-              Home
-            </Link>
-          </div>
-        </div>
+        <GameEndOverlay
+          title={win ? "You Win!" : "Game Over"}
+          onRestart={resetGame}
+        />
       )}
     </div>
   );

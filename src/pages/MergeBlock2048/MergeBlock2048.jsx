@@ -1,5 +1,5 @@
+import GameEndOverlay from "../../shared/Overlay/GameEndOverlay";
 import { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
 import "./MergeBlock2048.scss";
 
 const GRID_SIZE = 4;
@@ -181,19 +181,7 @@ const MergeBlocks2048 = () => {
           </div>
         ))}
 
-        {gameOver && (
-          <div className="overlay">
-            <h1>Game Over</h1>
-            <div className="overlay-buttons">
-              <button className="button" onClick={resetGame}>
-                Play Again
-              </button>
-              <Link to="/" className="button">
-                Home
-              </Link>
-            </div>
-          </div>
-        )}
+        {gameOver && <GameEndOverlay title="Game Over" onRestart={resetGame} />}
       </div>
     </div>
   );

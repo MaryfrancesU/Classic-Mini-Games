@@ -1,5 +1,5 @@
+import GameEndOverlay from "../../shared/Overlay/GameEndOverlay";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import "./TicTacToe.scss";
 
 const PLAYER = "X";
@@ -192,21 +192,16 @@ const TicTacToe = () => {
         </div>
 
         {(winner || isDraw) && (
-          <div className="overlay">
-            <h1>
-              {winner === PLAYER && "You Win!"}
-              {winner === COMPUTER && "Computer Wins"}
-              {isDraw && "It's a Draw"}
-            </h1>
-            <div className="overlay-buttons">
-              <button className="button" onClick={resetGame}>
-                Play Again
-              </button>
-              <Link to="/" className="button">
-                Home
-              </Link>
-            </div>
-          </div>
+          <GameEndOverlay
+            title={
+              winner === PLAYER
+                ? "You Win!"
+                : winner === COMPUTER
+                ? "Computer Wins"
+                : "It's a Draw"
+            }
+            onRestart={resetGame}
+          />
         )}
       </div>
     </div>

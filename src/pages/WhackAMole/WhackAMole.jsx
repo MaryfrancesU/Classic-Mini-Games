@@ -1,5 +1,5 @@
+import GameEndOverlay from "../../shared/Overlay/GameEndOverlay";
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import "./WhackAMole.scss";
 
 const GRID_SIZE = 9;
@@ -86,18 +86,9 @@ const WhackAMole = () => {
         ))}
 
         {gameOver && (
-          <div className="overlay">
-            <h1>Game Over</h1>
+          <GameEndOverlay title="Game Over" onRestart={startGame}>
             <p>Final Score: {score}</p>
-            <div className="overlay-buttons">
-              <button className="button" onClick={startGame}>
-                Play Again
-              </button>
-              <Link to="/" className="button">
-                Home
-              </Link>
-            </div>
-          </div>
+          </GameEndOverlay>
         )}
       </div>
     </div>

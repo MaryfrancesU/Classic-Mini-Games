@@ -1,12 +1,12 @@
+import GameEndOverlay from "../../shared/Overlay/GameEndOverlay";
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import "./SimonSays.scss";
 
 const COLORS = ["green", "red", "yellow", "blue"];
 
 const TONES = {
   green: 329.63,
-  red: 261.63, 
+  red: 261.63,
   yellow: 392.0,
   blue: 440.0,
 };
@@ -165,19 +165,7 @@ const SimonSays = () => {
           </div>
         )}
 
-        {gameOver && (
-          <div className="overlay">
-            <h1>Game Over</h1>
-            <div className="overlay-buttons">
-              <button className="button" onClick={startGame}>
-                Play Again
-              </button>
-              <Link to="/" className="button">
-                Home
-              </Link>
-            </div>
-          </div>
-        )}
+        {gameOver && <GameEndOverlay title="Game Over" onRestart={startGame} />}
       </div>
     </div>
   );
